@@ -8,5 +8,5 @@ function [n, e] = solveSystem(fileName)
     x = A \ b;
 
     % precision or relative error
-    e = norm(x - xe) \ norm(xe);  
+    e = norm(x - xe) / norm(xe);  
 end

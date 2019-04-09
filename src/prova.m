@@ -22,19 +22,19 @@ s = profile('status');
 fun = p.FunctionTable;
 
 numEvents = size(p.FunctionHistory,2);
-for n = 1:numEvents
-    name = fun(i).FunctionName;
-    name
-    if name == 'prova'
-        p.FunctionTable.TotalTime
-    end
-    
-%     if p.FunctionHistory(1,n) == 0
-%         disp(['Entered ' name]);
-%     else
-%         disp(['Exited ' name]);
+% for n = 1:numEvents
+%     name = fun(i).FunctionName;
+%     name
+%     if name == 'prova'
+%         p.FunctionTable.TotalTime
 %     end
-end
+%     
+% %     if p.FunctionHistory(1,n) == 0
+% %         disp(['Entered ' name]);
+% %     else
+% %         disp(['Exited ' name]);
+% %     end
+% end
 
 
 % a = fun.TotalTime;
