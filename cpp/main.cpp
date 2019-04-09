@@ -1,6 +1,6 @@
 #include "utils/MarketIO.h"
 
-#include <Eigen/Sparse>
+#include <Eigen/Eigen>
 #include <boost/iostreams/filtering_stream.hpp>
 #include <boost/iostreams/filter/gzip.hpp>
 
@@ -26,20 +26,26 @@ bool loadMarketGzip(SparseMatrixType& mat, const std::string& filename) {
 int main() {
     using namespace Eigen;
 
-    SparseMatrix<double> mat;
-    SparseMatrix<double> mat2;
+    SparseMatrix<double> A;
 
-    std::cout << "Loading matrices... " << std::flush;
+    std::cout << "Loading matrix... " << std::flush;
 
-    bool result;
-
-    result = loadMarket(mat, "cfd1.mtx");
-    result &= loadMarketGzip(mat2, "cfd1.mtx.gz");
+    bool result = loadMarketGzip(A, "ex15.mtx.gz");
 
     std::cout << (result ? "OK" : "ERROR") << std::endl;
+    std::cout << A.rows() << "x" << A.cols() << ", " << A.nonZeros() << " non-zeroes" << std::endl;
 
-    std::cout << mat.rows() << "x" << mat.cols() << " " << mat.nonZeros() << std::endl;
-    std::cout << mat2.rows() << "x" << mat2.cols() << " " << mat2.nonZeros() << std::endl;
+    VectorXd xe = VectorXd::Ones(A.rows());
+    VectorXd b = A * xe;
+
+    SparseLU<SparseMatrix<double>> lu(A);
+
+    VectorXd x = lu.solve(b);
+
+    double relativeError = (x - xe).norm() / xe.norm();
+
+    std::cout << x << std::endl;
+    std::cout << "Relative error: " << relativeError << std::endl;
 
     return 0;
 }
