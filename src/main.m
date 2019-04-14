@@ -42,10 +42,9 @@ xlabel('Matrix size')
 ylabel('Time (seconds)') 
 
 subplot(1,3,2, 'XScale', 'log', 'YScale', 'log');
-[relativeErrorsSorted, idx] = sort(relativeErrors);
-realTimesSorted = realTimes(idx);
+relativeErrorsSorted = relativeErrors(idx);
 
-loglog(relativeErrorsSorted, realTimesSorted, '-s');
+loglog(matrixSizesSorted, relativeErrorsSorted, '-s');
 
 title('Plot of the relative errors of the systems')
 xlabel('Matrix size') 

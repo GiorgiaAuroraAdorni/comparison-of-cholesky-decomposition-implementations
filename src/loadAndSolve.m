@@ -6,7 +6,7 @@ function [e, n] = loadAndSolve(fileName)
     xe = ones(n, 1);
     b = A * xe;
     
-    fprintf(1, 'Now solving %s\n', fileName);
+    fprintf(1, '\nNow solving %s\n', fileName);
     x = solveSystem(A, b);
 
     % precision or relative error
