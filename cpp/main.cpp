@@ -26,21 +26,22 @@ bool loadMarketGzip(SparseMatrixType& mat, const std::string& filename) {
 int main() {
     using namespace Eigen;
 
-    SparseMatrix<double> A;
+    SparseMatrix<double> matrix;
 
     std::cout << "Loading matrix... " << std::flush;
 
-    bool result = loadMarketGzip(A, "ex15.mtx.gz");
+    bool result = loadMarketGzip(matrix, "ex15.mtx.gz");
+    auto A = matrix.selfadjointView<Lower>();
 
     std::cout << (result ? "OK" : "ERROR") << std::endl;
-    std::cout << A.rows() << "x" << A.cols() << ", " << A.nonZeros() << " non-zeroes" << std::endl;
+    std::cout << A.rows() << "x" << A.cols() << std::endl;
 
     VectorXd xe = VectorXd::Ones(A.rows());
     VectorXd b = A * xe;
 
-    SparseLU<SparseMatrix<double>> lu(A);
+    SimplicialLDLT<SparseMatrix<double>> solver(A);
 
-    VectorXd x = lu.solve(b);
+    VectorXd x = solver.solve(b);
 
     double relativeError = (x - xe).norm() / xe.norm();
 
