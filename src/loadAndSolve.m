@@ -7,7 +7,8 @@ function [e, n] = loadAndSolve(fileName)
     b = A * xe;
     
     fprintf(1, '\nNow solving %s\n', fileName);
-    x = solveSystem(A, b);
+    
+    x, m = solveSystem(A, b);
 
     % precision or relative error
     e = norm(x - xe) / norm(xe);  

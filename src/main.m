@@ -1,15 +1,16 @@
 clc
 clear
 format short
+profile off
 
 %%
-% memory  % only in Windows
 
 fileList = getFileList('matrices');
 
 matrixSizes = zeros(numel(fileList), 1);
 realTimes = zeros(numel(fileList), 1);
 relativeErrors = zeros(numel(fileList), 1);
+memories = zeros(numel(fileList), 1);
 
 for i = 1:numel(fileList)
     profile on -history
@@ -31,11 +32,12 @@ for i = 1:numel(fileList)
     end
 end
 
-figure(1)
-subplot(1,3,1, 'XScale', 'log', 'YScale', 'log');
 [matrixSizesSorted, idx] = sort(matrixSizes);
-realTimesSorted = realTimes(idx);
 
+figure(1)
+
+subplot(1,3,1, 'XScale', 'log', 'YScale', 'log');
+realTimesSorted = realTimes(idx);
 loglog(matrixSizesSorted, realTimesSorted, '-s');
 title('Plot of the time required to calculate the solution of the systems')
 xlabel('Matrix size') 
@@ -43,14 +45,14 @@ ylabel('Time (seconds)')
 
 subplot(1,3,2, 'XScale', 'log', 'YScale', 'log');
 relativeErrorsSorted = relativeErrors(idx);
-
 loglog(matrixSizesSorted, relativeErrorsSorted, '-s');
-
 title('Plot of the relative errors of the systems')
 xlabel('Matrix size') 
 ylabel('Relative Error') 
 
 subplot(1,3,3, 'XScale', 'log', 'YScale', 'log');
+memoriesSorted = memories(idx);
+loglog(matrixSizesSorted, memoriesSorted, '-s');
 title('Plot of the memory needed to solve the systems')
 xlabel('Matrix size') 
-ylabel('Memory') 
+ylabel('Memory')
