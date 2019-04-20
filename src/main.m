@@ -20,7 +20,6 @@ for i = 1:numel(fileList)
     [relativeErrors(i), matrixSizes(i)] = loadAndSolve(fileName); % %#ok<NOPTS>
     
     p = profile('info');
-    % s = profile('status');
     fun = p.FunctionTable;
 
     for j = 1:length(fun)
