@@ -2,33 +2,51 @@
 
 #include <Eigen/Eigen>
 
+#include <boost/filesystem.hpp>
+
 #include <iostream>
 
-int main() {
+template<typename SparseMatrixType>
+Eigen::VectorXd solveSystem(SparseMatrixType A, Eigen::VectorXd b) {
     using namespace Eigen;
 
-    std::string filename = "ex15.mtx.gz";
+    SimplicialLDLT<SparseMatrix<double>> solver(A);
+
+    return solver.solve(b);
+}
+
+void processMatrix(std::string filename) {
+    using namespace Eigen;
+
     SparseMatrix<double> matrix;
 
-    std::cout << "Loading matrix '" << filename << "'... " << std::flush;
+    std::cerr << "Processing matrix '" << filename << "'... " << std::flush;
 
     bool result = loadMarketGzip(matrix, filename);
     auto A = matrix.selfadjointView<Lower>();
 
-    std::cout << (result ? "OK" : "ERROR") << std::endl;
-    std::cout << A.rows() << "x" << A.cols() << std::endl;
+    std::cerr << (result ? "OK" : "ERROR") << std::endl;
+    std::cerr << A.rows() << "x" << A.cols() << std::endl;
 
     VectorXd xe = VectorXd::Ones(A.rows());
     VectorXd b = A * xe;
 
-    SimplicialLDLT<SparseMatrix<double>> solver(A);
-
-    VectorXd x = solver.solve(b);
+    VectorXd x = solveSystem(A, b);
 
     double relativeError = (x - xe).norm() / xe.norm();
 
-    std::cout << x << std::endl;
-    std::cout << "Relative error: " << relativeError << std::endl;
+    std::cerr << "Relative error: " << relativeError << std::endl;
+}
+
+int main(int argc, char **argv) {
+    using namespace Eigen;
+    namespace fs = boost::filesystem;
+
+    std::string directory = "prova";
+
+    for (auto &file : fs::directory_iterator(directory)) {
+        processMatrix(file.path().string());
+    }
 
     return 0;
 }
