@@ -5,7 +5,7 @@ profile off
 
 %%
 
-fileList = getFileList('matrices');
+[fileList, matrixList] = getFileList('matrices');
 
 matrixSizes = zeros(numel(fileList), 1);
 realTimes = zeros(numel(fileList), 1);
@@ -18,8 +18,9 @@ for i = 1:numel(fileList)
     profile on -history
     
     fileName = string(fileList(i));
+    matrixName = string(matrixList(i));
     
-    [relativeErrors(i), matrixSizes(i)] = loadAndSolve(fileName); % %#ok<NOPTS>
+    [relativeErrors(i), matrixSizes(i), nonZeros(i)] = loadAndSolve(fileName, matrixName); % %#ok<NOPTS>
     
     p = profile('info');
     fun = p.FunctionTable;
