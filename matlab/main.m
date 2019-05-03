@@ -8,9 +8,10 @@ profile off
 [fileList, matrixList] = getFileList('matrices');
 
 matrixSizes = zeros(numel(fileList), 1);
-realTimes = zeros(numel(fileList), 1);
+nonZeros = zeros(numel(fileList), 1);
+loadTimes = zeros(numel(fileList), 1);
+solveTimes = zeros(numel(fileList), 1);
 relativeErrors = zeros(numel(fileList), 1);
-memories = zeros(numel(fileList), 1);
 
 for i = 1:numel(fileList)
     input('Press a key to continue...');
@@ -29,17 +30,22 @@ for i = 1:numel(fileList)
         f = fun(j);
 
         if f.FunctionName == "solveSystem"
-           realTimes(i) = f.TotalTime;  % %#ok<NOPTS>
+           solveTimes(i) = f.TotalTime;
+        elseif f.FunctionName == "loadMatrices"
+           loadTimes(i) = f.TotalTime;
         end
     end
 end
+
+saveOutput(matrixList, matrixSizes, nonZeros, loadTimes, solveTimes, relativeErrors)
+
 
 [matrixSizesSorted, idx] = sort(matrixSizes);
 
 figure(1)
 
 subplot(1,3,1, 'XScale', 'log', 'YScale', 'log');
-realTimesSorted = realTimes(idx);
+realTimesSorted = solveTimes(idx);
 loglog(matrixSizesSorted, realTimesSorted, '-s');
 title('Plot of the time required to calculate the solution of the systems')
 xlabel('Matrix size') 
