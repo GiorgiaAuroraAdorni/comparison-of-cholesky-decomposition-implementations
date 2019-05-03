@@ -1,23 +1,26 @@
+#!/usr/bin/env python3
+
 import psutil
 import sys
 
-memory_usage = 0
+pid = int(sys.argv[1])
+p = psutil.Process(pid)
 
-PID = int(sys.argv[1])
+initial_memory = p.memory_info().rss
+max_memory = 0
 
-initial_memory = psutil.Process(PID).memory_info().rss / 2. ** 30
-
-print("Monitoring " + psutil.Process(PID).name())
+print("Monitoring " + p.name() + "...")
 
 try:
     while True:
-        current_mem = psutil.Process(PID).memory_info().rss / 2. ** 30
-        if current_mem > memory_usage:
-            memory_usage = current_mem
-except:
-    e = sys.exc_info()[0]
-    print("Error: " )
-    print(e)
+        current_memory = p.memory_info().rss
+
+        if max_memory < current_memory:
+            max_memory = current_memory
+
+except KeyboardInterrupt:
     pass
 
-print(memory_usage - initial_memory)
+memory_usage = max_memory - initial_memory
+
+print(memory_usage)
