@@ -13,6 +13,8 @@ relativeErrors = zeros(numel(fileList), 1);
 memories = zeros(numel(fileList), 1);
 
 for i = 1:numel(fileList)
+    input('Press a key to continue...');
+
     profile on -history
     
     fileName = string(fileList(i));
@@ -49,9 +51,9 @@ title('Plot of the relative errors of the systems')
 xlabel('Matrix size') 
 ylabel('Relative Error') 
 
-subplot(1,3,3, 'XScale', 'log', 'YScale', 'log');
-memoriesSorted = memories(idx);
-loglog(matrixSizesSorted, memoriesSorted, '-s');
-title('Plot of the memory needed to solve the systems')
-xlabel('Matrix size') 
-ylabel('Memory')
+% subplot(1,3,3, 'XScale', 'log', 'YScale', 'log');
+% memoriesSorted = memories(idx);
+% loglog(matrixSizesSorted, memoriesSorted, '-s');
+% title('Plot of the memory needed to solve the systems')
+% xlabel('Matrix size') 
+% ylabel('Memory')
