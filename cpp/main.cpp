@@ -93,7 +93,7 @@ void processDirectory(const boost::filesystem::path &directory, bool wait = fals
     namespace fs = boost::filesystem;
     namespace algo = boost::algorithm;
 
-    std::cerr << "Process ID: " << getpid() << std::endl;
+    //std::cerr << "Process ID: " << getpid() << std::endl;
     std::cerr << "Working Directory: " << directory << std::endl;
 
     std::cout << "name,rows,nonZeros,loadTime,solveTime,relativeError" << std::endl;
