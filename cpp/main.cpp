@@ -14,8 +14,8 @@ struct MatrixInfo {
 
     double relativeError;
 
-    std::chrono::duration<double, std::milli> loadTime;
-    std::chrono::duration<double, std::milli> solveTime;
+    std::chrono::duration<double> loadTime;
+    std::chrono::duration<double> solveTime;
 };
 
 template<typename SparseMatrixType>
