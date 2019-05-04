@@ -78,33 +78,63 @@ MatrixInfo processMatrix(const std::string &filename) {
     return info;
 }
 
-int main(int argc, char **argv) {
-    using namespace Eigen;
+void processFile(const boost::filesystem::path &file) {
+    MatrixInfo info = processMatrix(file.string());
+
+    std::cout << file.filename().string() << ","
+              << info.rows << ","
+              << info.nonZeros << ","
+              << info.loadTime.count() << ","
+              << info.solveTime.count() << ","
+              << info.relativeError << std::endl;
+}
+
+void processDirectory(const boost::filesystem::path &directory, bool wait = false) {
     namespace fs = boost::filesystem;
     namespace algo = boost::algorithm;
 
-    std::string directory = "prova";
+    std::cerr << "Process ID: " << getpid() << std::endl;
+    std::cerr << "Working Directory: " << directory << std::endl;
 
     std::cout << "name,rows,nonZeros,loadTime,solveTime,relativeError" << std::endl;
 
     for (auto &file : fs::directory_iterator(directory)) {
-        fs::path filepath = file.path();
+        const fs::path &filepath = file.path();
 
         std::string filename = filepath.filename().string();
-        std::string extension = filepath.extension().string();
 
         if (!algo::ends_with(filename, ".mtx.gz")) {
+            std::cerr << "Ignoring file " << filename << std::endl;
             continue;
         }
 
-        MatrixInfo info = processMatrix(filepath.string());
+        if (wait) {
+            std::cerr << "Press a key to continue... ";
+            std::cin.get();
+        }
 
-        std::cout << filename << ","
-                  << info.rows << ","
-                  << info.nonZeros << ","
-                  << info.loadTime.count() << ","
-                  << info.solveTime.count() << ","
-                  << info.relativeError << std::endl;
+        processFile(filepath);
+    }
+}
+
+int main(int argc, char **argv) {
+    namespace fs = boost::filesystem;
+
+    fs::path inputPath;
+
+    if (argc == 1) {
+        inputPath = ".";
+    } else if (argc == 2) {
+        inputPath = argv[1];
+    } else {
+        std::cerr << "Unexpected command line arguments!" << std::endl;
+        return 1;
+    }
+
+    if (fs::is_directory(inputPath)) {
+        processDirectory(inputPath);
+    } else {
+        processFile(inputPath);
     }
 
     return 0;
