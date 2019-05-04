@@ -20,7 +20,7 @@ for i = 1:numel(fileList)
     [matrixSizes(i), nonZeros(i), solveTimes(i), loadTimes(i), relativeErrors(i)] = processFile(fileName, matrixName);
 end
 
-saveOutput(matrixList, matrixSizes, nonZeros, loadTimes, solveTimes, relativeErrors)
+%saveOutput(matrixList, matrixSizes, nonZeros, loadTimes, solveTimes, relativeErrors)
 
 [matrixSizesSorted, idx] = sort(matrixSizes);
 

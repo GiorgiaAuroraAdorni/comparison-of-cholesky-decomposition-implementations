@@ -15,4 +15,7 @@ function [matrixSize, nonZeros, solveTime, loadTime, relativeError] = processFil
          loadTime = f.TotalTime;
       end
   end
+  
+  saveSingleMatrixOutput(matrixName, matrixSize, nonZeros, loadTime, solveTime, relativeError)
+  
 end
