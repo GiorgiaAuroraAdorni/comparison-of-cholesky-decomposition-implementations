@@ -14,31 +14,13 @@ solveTimes = zeros(numel(fileList), 1);
 relativeErrors = zeros(numel(fileList), 1);
 
 for i = 1:numel(fileList)
-    input('Press a key to continue...');
-
-    profile on -history
-    
     fileName = string(fileList(i));
     matrixName = string(matrixList(i));
-    
-    [relativeErrors(i), matrixSizes(i), nonZeros(i)] = loadAndSolve(fileName, matrixName); % %#ok<NOPTS>
-    
-    p = profile('info');
-    fun = p.FunctionTable;
 
-    for j = 1:length(fun)
-        f = fun(j);
-
-        if f.FunctionName == "solveSystem"
-           solveTimes(i) = f.TotalTime;
-        elseif f.FunctionName == "loadMatrices"
-           loadTimes(i) = f.TotalTime;
-        end
-    end
+    [matrixSizes(i), nonZeros(i), solveTimes(i), loadTimes(i), relativeErrors(i)] = processFile(fileName, matrixName);
 end
 
 saveOutput(matrixList, matrixSizes, nonZeros, loadTimes, solveTimes, relativeErrors)
-
 
 [matrixSizesSorted, idx] = sort(matrixSizes);
 
