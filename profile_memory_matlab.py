@@ -3,7 +3,6 @@
 from util import get_file_list, monitor_memory
 
 import subprocess
-import sys
 import csv
 import os
 
@@ -11,7 +10,7 @@ os.chdir("matlab")
 
 matrices_dir = "matrices"
 
-file_list, matrix_list = get_file_list(matrices_dir)
+file_list, matrix_list = get_file_list(matrices_dir, ".mat")
 
 matlab_path = "/usr/local/bin/matlab"
 
@@ -27,10 +26,6 @@ with open('output/matlabOutput.csv', 'w') as output_csv:
 
         subproc = subprocess.Popen(command)
 
-        if sys.platform.startswith("linux"):
-            with open('/proc/' + str(subproc.pid) + '/oom_score_adj', 'w') as score:
-                score.write('1000')
-
         max_memory, memory_usage = monitor_memory(subproc)
 
         with open('output/' + matrix_name + '.csv', 'r') as input_csv:
@@ -40,6 +35,7 @@ with open('output/matlabOutput.csv', 'w') as output_csv:
             row.append(memory_usage)
 
         writer.writerow(row)
+        output_csv.flush()
 
         input_csv.close()
 

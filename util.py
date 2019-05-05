@@ -10,6 +10,10 @@ def monitor_memory(subproc):
     pid = subproc.pid
     proc = psutil.Process(pid)
 
+    if sys.platform.startswith("linux"):
+        with open('/proc/' + str(pid) + '/oom_score_adj', 'w') as score:
+            score.write('1000')
+
     initial_memory = proc.memory_info().rss
     max_memory = 0
 
@@ -27,6 +31,8 @@ def monitor_memory(subproc):
 
     except:
         print("Exception:", sys.exc_info()[0])
+        
+    print("Process exited with code: ", subproc.returncode)
 
     memory_usage = max_memory - initial_memory
 
@@ -36,13 +42,13 @@ def monitor_memory(subproc):
     return max_memory, memory_usage
 
 
-def get_file_list(directory):
+def get_file_list(directory, extension):
     matrix_list = list()
     file_list = list()
 
     # Iterate over all the entries
     for file in os.listdir(directory):
-        if file.endswith(".mat"):
+        if file.endswith(extension):
             matrix_list.append(file)
             # Store full path
             file_list.append(os.path.join(directory, file))
