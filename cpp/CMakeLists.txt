@@ -3,18 +3,16 @@ project(cholesky)
 
 set(CMAKE_CXX_STANDARD 14)
 
+set(Boost_COMPONENTS filesystem iostreams)
+
 if(WIN32)
-	#set(Boost_DEBUG ON)
-	set(Boost_COMPILER -vc142)
-	set(Boost_USE_STATIC_LIBS        ON)
-
-	set(BOOST_LIBRARYDIR "D:/Programmi/boost_1_70_0/lib64-msvc-14.2")
-
-	add_definitions(-DBOOST_ALL_NO_LIB)
+	set(Boost_USE_STATIC_LIBS ON)
+	
+	list(APPEND Boost_COMPONENTS zlib)
 endif()
 
 find_package(Eigen3  3.3 REQUIRED NO_MODULE)
-find_package(Boost  1.68 REQUIRED COMPONENTS filesystem iostreams zlib)
+find_package(Boost  1.68 REQUIRED COMPONENTS ${Boost_COMPONENTS})
 
 add_executable(cholesky-cpp main.cpp)
 target_include_directories(cholesky-cpp SYSTEM PRIVATE ${Boost_INCLUDE_DIRS})
