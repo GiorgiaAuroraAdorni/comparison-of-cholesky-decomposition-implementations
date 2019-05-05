@@ -9,7 +9,10 @@ import csv
 import os
 
 
-def monitor_memory(proc):
+def monitor_memory(subproc):
+    pid = subproc.pid
+    proc = psutil.Process(pid)
+
     initial_memory = proc.memory_info().rss
     max_memory = 0
 
@@ -17,13 +20,14 @@ def monitor_memory(proc):
     print("Initial memory usage:", initial_memory)
 
     try:
-        while True:
+        while subproc.poll() is None:
             current_memory = proc.memory_info().rss
 
             if max_memory < current_memory:
                 max_memory = current_memory
 
             time.sleep(0.050)  # 20Hz sampling rate
+
     except:
         print("Exception:", sys.exc_info()[0])
 
@@ -54,7 +58,7 @@ matrices_dir = "matrices"
 
 file_list, matrix_list = get_file_list(matrices_dir)
 
-matlab_path = "/Volumes/Gio-Mac/PROGRAMMI/MATLAB_R2019a.app/bin/matlab"
+matlab_path = "/usr/local/bin/matlab"
 
 with open('output/matlabOutput.csv', 'w') as output_csv:
     writer = csv.writer(output_csv, delimiter=',')
@@ -64,12 +68,15 @@ with open('output/matlabOutput.csv', 'w') as output_csv:
         file_name = file_list[i]
         matrix_name = matrix_list[i]
 
-        command = [matlab_path, "-r", "processFile('" + file_name + "', '" + matrix_name + "'); quit"]
+        command = [matlab_path, "-nodesktop", "-nosplash", "-r", "processFile('" + file_name + "', '" + matrix_name + "'); quit"]
 
-        pid = subprocess.Popen(command).pid
-        p = psutil.Process(pid)
+        subproc = subprocess.Popen(command)
 
-        max_memory, memory_usage = monitor_memory(p)
+        if sys.platform.startswith("linux"):
+            with open('/proc/' + str(subproc.pid) + '/oom_score_adj', 'w') as score:
+                score.write('1000')
+
+        max_memory, memory_usage = monitor_memory(subproc)
 
         with open('output/' + matrix_name + '.csv', 'r') as input_csv:
             reader = csv.reader(input_csv)

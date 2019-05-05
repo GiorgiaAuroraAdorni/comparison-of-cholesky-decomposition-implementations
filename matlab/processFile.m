@@ -18,4 +18,5 @@ function [matrixSize, nonZeros, solveTime, loadTime, relativeError] = processFil
   
   saveSingleMatrixOutput(matrixName, matrixSize, nonZeros, loadTime, solveTime, relativeError)
   
+  fprintf(1, '\nIm done now\n');
 end
