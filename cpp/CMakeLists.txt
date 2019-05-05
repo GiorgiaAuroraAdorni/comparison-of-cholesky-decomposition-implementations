@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.13)
+cmake_minimum_required(VERSION 3.10)
 include(CheckCXXCompilerFlag)
 
 project(cholesky)
@@ -35,7 +35,7 @@ if(WIN32)
 endif()
 
 find_package(Eigen3  3.3 REQUIRED NO_MODULE)
-find_package(Boost  1.68 REQUIRED COMPONENTS filesystem iostreams)
+find_package(Boost  1.65 REQUIRED COMPONENTS filesystem iostreams)
 
 add_executable(cholesky-cpp main.cpp)
 target_include_directories(cholesky-cpp SYSTEM PRIVATE ${Boost_INCLUDE_DIRS})
