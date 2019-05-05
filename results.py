@@ -2,9 +2,10 @@
 
 from collections import defaultdict
 import matplotlib.pyplot as plt
+from util import plot_results
 import csv
 
-# each value in each column is appended to a list
+# Each value in each column is appended to a list
 columns = defaultdict(list)
 
 with open('matlab/output/matlabOutput.csv') as f:
@@ -16,78 +17,34 @@ with open('matlab/output/matlabOutput.csv') as f:
             else:
                 columns[k].append(v)
 
-# plot 1
-plt.subplot(2, 3, 1)
-new_rows, new_solveTime = zip(*sorted(zip(columns['rows'], columns['solveTime'])))
+# Plot based on the rows number of each matrix
+fig, axes = plt.subplots(nrows=3, ncols=1,figsize=(6, 8))
 
-plt.plot(new_rows, new_solveTime, 'bo-', linewidth=2, markersize=6)
-plt.xscale('log')
-plt.yscale('log')
+plt.subplot(3, 1, 1)
+plot_results(columns['rows'], columns['solveTime'], 'Matrix Size', 'Time (seconds)', 'Time required to solve the systems')
 
-plt.xlabel('Matrix size', fontsize=6)
-plt.ylabel('Time (seconds)', fontsize=6)
-plt.title("Time required to solve the systems", weight='bold', fontsize=8)
+plt.subplot(3, 1, 2)
+plot_results(columns['rows'], columns['relativeError'], 'Matrix Size', 'Relative Error', 'Relative errors')
 
-# plot 2
-plt.subplot(2, 3, 2)
-new_rows, new_relativeError = zip(*sorted(zip(columns['rows'], columns['relativeError'])))
+plt.subplot(3, 1, 3)
+plot_results(columns['rows'], columns['maxMemory'], 'Matrix Size', 'Max Memory (byte)', 'Max memory used to solve the systems')
 
-plt.plot(new_rows, new_relativeError, 'bo-', linewidth=2, markersize=6)
-plt.xscale('log')
-plt.yscale('log')
-
-plt.xlabel('Matrix size', fontsize=6)
-plt.ylabel('Relative Error', fontsize=6)
-plt.title("Relative errors", weight='bold', fontsize=8)
-
-# plot 3
-plt.subplot(2, 3, 3)
-new_rows, new_maxMemory = zip(*sorted(zip(columns['rows'], columns['maxMemory'])))
-
-plt.plot(new_rows, new_maxMemory, 'bo-', linewidth=2, markersize=6)
-plt.xscale('log')
-plt.yscale('log')
-
-plt.xlabel('Matrix size', fontsize=6)
-plt.ylabel('Max Memory (byte)', fontsize=6)
-plt.title("Max memory used to solve the systems", weight='bold', fontsize=8)
-
-# plot 4
-plt.subplot(2, 3, 4)
-new_nonZeros, new_solveTime = zip(*sorted(zip(columns['nonZeros'], columns['solveTime'])))
-
-plt.plot(new_nonZeros, new_solveTime, 'bo-', linewidth=2, markersize=6)
-plt.xscale('log')
-plt.yscale('log')
-
-plt.xlabel('Non Zeros', fontsize=6)
-plt.ylabel('Time (seconds)', fontsize=6)
-plt.title("Time required to solve the systems", weight='bold', fontsize=8)
-
-# plot 5
-plt.subplot(2, 3, 5)
-new_nonZeros, new_relativeError = zip(*sorted(zip(columns['nonZeros'], columns['relativeError'])))
-
-plt.plot(new_nonZeros, new_relativeError, 'bo-', linewidth=2, markersize=6)
-plt.xscale('log')
-plt.yscale('log')
-
-plt.xlabel('Non Zeros', fontsize=6)
-plt.ylabel('Relative Error', fontsize=6)
-plt.title("Relative errors", weight='bold', fontsize=8)
-
-# plot 6
-plt.subplot(2, 3, 6)
-new_nonZeros, new_maxMemory = zip(*sorted(zip(columns['nonZeros'], columns['maxMemory'])))
-
-plt.plot(new_nonZeros, new_maxMemory, 'bo-', linewidth=2, markersize=6)
-plt.xscale('log')
-plt.yscale('log')
-
-plt.xlabel('Non Zeros', fontsize=6)
-plt.ylabel('Max Memory (byte)', fontsize=6)
-plt.title("Max memory used to solve the systems", weight='bold', fontsize=8)
-
-plt.savefig('matlab.pdf')
+plt.tight_layout()
+plt.savefig('resultOnSize.pdf')
 plt.show()
 
+# Plot based on the number of non zeros of each matrix
+fig, axes = plt.subplots(nrows=3, ncols=1,figsize=(6, 8))
+
+plt.subplot(3, 1, 1)
+plot_results(columns['nonZeros'], columns['solveTime'], 'Non Zeros', 'Time (seconds)', 'Time required to solve the systems')
+
+plt.subplot(3, 1, 2)
+plot_results(columns['nonZeros'], columns['relativeError'], 'Non Zeros', 'Relative Error', 'Relative errors')
+
+plt.subplot(3, 1, 3)
+plot_results(columns['nonZeros'], columns['maxMemory'], 'Non Zeros', 'Max Memory (byte)', 'Max memory used to solve the systems')
+
+plt.tight_layout()
+plt.savefig('resultOnNonZeros.pdf')
+plt.show()

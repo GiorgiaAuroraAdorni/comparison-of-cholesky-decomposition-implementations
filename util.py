@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+import matplotlib.pyplot as plt
 import psutil
 import time
 import sys
@@ -54,3 +55,15 @@ def get_file_list(directory, extension):
             file_list.append(os.path.join(directory, file))
 
     return file_list, matrix_list
+
+
+def plot_results(x, y, xlabel, ylabel, title):
+    sorted_x, sorted_y = zip(*sorted(zip(x, y)))
+    plt.plot(sorted_x, sorted_y, 'go-', linewidth=2, markersize=6)
+
+    plt.xscale('log')
+    plt.yscale('log')
+
+    plt.xlabel(xlabel, fontsize=6)
+    plt.ylabel(ylabel, fontsize=6)
+    plt.title(title, weight='bold', fontsize=8)
