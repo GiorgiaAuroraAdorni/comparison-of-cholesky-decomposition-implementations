@@ -37,7 +37,8 @@ endif()
 find_package(Eigen3  3.3 REQUIRED NO_MODULE)
 find_package(Boost  1.65 REQUIRED COMPONENTS filesystem iostreams)
 
+link_directories(${Boost_LIBRARY_DIRS})
+
 add_executable(cholesky-cpp main.cpp)
 target_include_directories(cholesky-cpp SYSTEM PRIVATE ${Boost_INCLUDE_DIRS})
-target_link_directories(cholesky-cpp PRIVATE ${Boost_LIBRARY_DIRS})
 target_link_libraries(cholesky-cpp Eigen3::Eigen ${Boost_LIBRARIES})
