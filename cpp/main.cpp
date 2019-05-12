@@ -19,10 +19,10 @@ struct MatrixInfo {
 };
 
 template<typename SparseMatrixType>
-Eigen::VectorXd solveSystem(SparseMatrixType A, Eigen::VectorXd b) {
+Eigen::VectorXd solveSystem(const SparseMatrixType &A, const Eigen::VectorXd &b) {
     using namespace Eigen;
 
-    SimplicialLDLT<SparseMatrix<double>> solver(A);
+    SimplicialLDLT<SparseMatrixType> solver(A);
 
     return solver.solve(b);
 }
