@@ -1,50 +1,30 @@
 #!/usr/bin/env python3
-
-from collections import defaultdict
-import matplotlib.pyplot as plt
-from util import plot_results
-import csv
+from my_plot import save_plot_os, save_plot_comparison
+from util import get_file, extract_columns
+import os
 
 # Each value in each column is appended to a list
-columns = defaultdict(list)
+os.chdir("matlab/output")
 
-with open('matlab/output/matlabOutput.csv') as f:
-    reader = csv.DictReader(f)  # read rows into a dictionary format
-    for row in reader:  # read a row as {column1: value1, column2: value2,...}
-        for (k, v) in row.items():  # go over each column name and value
-            if k != 'name':
-                columns[k].append(float(v))  # append the value into the appropriate list based on column name k
-            else:
-                columns[k].append(v)
+macos_out = get_file("macos", "matlabOutput.csv")
+ubuntu_out = get_file("ubuntu", "matlabOutput.csv")
+windows_out = get_file("windows", "matlabOutput.csv")
 
-# Plot based on the rows number of each matrix
-fig, axes = plt.subplots(nrows=3, ncols=1,figsize=(6, 8))
+columns_macos = extract_columns(macos_out)
+columns_ubuntu = extract_columns(ubuntu_out)
+columns_windows = extract_columns(windows_out)
 
-plt.subplot(3, 1, 1)
-plot_results(columns['rows'], columns['solveTime'], 'Matrix Size', 'Time (seconds)', 'Time required to solve the systems')
+##
+save_plot_os(columns_macos, "rows", "Matrix Size", "results/macos_OnSize.pdf")
+save_plot_os(columns_macos, "nonZeros", "Non Zeros", "results/macos_OnNonZeros.pdf")
 
-plt.subplot(3, 1, 2)
-plot_results(columns['rows'], columns['relativeError'], 'Matrix Size', 'Relative Error', 'Relative errors')
+save_plot_os(columns_ubuntu, "rows", "Matrix Size", "results/ubuntu_OnSize.pdf")
+save_plot_os(columns_ubuntu, "nonZeros", "Non Zeros", "results/ubuntu_OnNonZeros.pdf")
 
-plt.subplot(3, 1, 3)
-plot_results(columns['rows'], columns['maxMemory'], 'Matrix Size', 'Max Memory (byte)', 'Max memory used to solve the systems')
+save_plot_os(columns_windows, "rows", "Matrix Size", "results/windows_OnSize.pdf")
+save_plot_os(columns_windows, "nonZeros", "Non Zeros", "results/windows_OnNonZeros.pdf")
 
-plt.tight_layout()
-plt.savefig('resultOnSize.pdf')
-plt.show()
+##
+save_plot_comparison(columns_ubuntu, columns_windows, "rows", "Matrix Size", "results/ubuntu-windows_comparisonOnSize.pdf")
+save_plot_comparison(columns_ubuntu, columns_windows, "nonZeros", "Non Zeros", "results/ubuntu-windows_comparisonOnNonZeros.pdf")
 
-# Plot based on the number of non zeros of each matrix
-fig, axes = plt.subplots(nrows=3, ncols=1,figsize=(6, 8))
-
-plt.subplot(3, 1, 1)
-plot_results(columns['nonZeros'], columns['solveTime'], 'Non Zeros', 'Time (seconds)', 'Time required to solve the systems')
-
-plt.subplot(3, 1, 2)
-plot_results(columns['nonZeros'], columns['relativeError'], 'Non Zeros', 'Relative Error', 'Relative errors')
-
-plt.subplot(3, 1, 3)
-plot_results(columns['nonZeros'], columns['maxMemory'], 'Non Zeros', 'Max Memory (byte)', 'Max memory used to solve the systems')
-
-plt.tight_layout()
-plt.savefig('resultOnNonZeros.pdf')
-plt.show()
