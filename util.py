@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 
-import matplotlib.pyplot as plt
+from collections import defaultdict
 import psutil
 import time
 import sys
+import csv
 import os
 
 
@@ -43,7 +44,7 @@ def monitor_memory(subproc):
     return max_memory, memory_usage
 
 
-def get_file_list(directory, extension):
+def get_matrix_list(directory, extension):
     matrix_list = list()
     file_list = list()
 
@@ -57,13 +58,28 @@ def get_file_list(directory, extension):
     return file_list, matrix_list
 
 
-def plot_results(x, y, xlabel, ylabel, title):
-    sorted_x, sorted_y = zip(*sorted(zip(x, y)))
-    plt.plot(sorted_x, sorted_y, 'go-', linewidth=2, markersize=6)
+def get_file(directory, filename):
+    out = ""
 
-    plt.xscale('log')
-    plt.yscale('log')
+    # Iterate over all the entries
+    for file in os.listdir(directory):
+        if file.endswith(filename):
+            # Store full path
+            out = (os.path.join(directory, file))
 
-    plt.xlabel(xlabel, fontsize=6)
-    plt.ylabel(ylabel, fontsize=6)
-    plt.title(title, weight='bold', fontsize=8)
+    return out
+
+
+def extract_columns(directory):
+    columns = defaultdict(list)
+
+    with open(directory, 'r') as f:
+        reader = csv.DictReader(f)  # read rows into a dictionary format
+        for row in reader:  # read a row as {column1: value1, column2: value2,...}
+            for (k, v) in row.items():  # go over each column name and value
+                if k != 'name':
+                    columns[k].append(float(v))  # append the value into the appropriate list based on column name k
+                else:
+                    columns[k].append(v)
+
+    return columns
