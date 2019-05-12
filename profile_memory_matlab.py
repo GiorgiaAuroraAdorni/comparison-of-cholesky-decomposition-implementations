@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-from util import get_file_list, monitor_memory
+from util import get_matrix_list, monitor_memory
 
 import subprocess
 import csv
@@ -10,7 +10,7 @@ os.chdir("matlab")
 
 matrices_dir = "matrices"
 
-file_list, matrix_list = get_file_list(matrices_dir, ".mat")
+file_list, matrix_list = get_matrix_list(matrices_dir, ".mat")
 
 matlab_path = "/usr/local/bin/matlab"
 
