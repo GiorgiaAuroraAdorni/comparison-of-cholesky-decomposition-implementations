@@ -2,6 +2,10 @@
 
 #include <Eigen/Eigen>
 
+#if ENABLE_MKL
+#include <Eigen/PardisoSupport>
+#endif
+
 #include <boost/algorithm/string.hpp>
 #include <boost/filesystem.hpp>
 
@@ -22,7 +26,11 @@ template<typename SparseMatrixType>
 Eigen::VectorXd solveSystem(const SparseMatrixType &A, const Eigen::VectorXd &b) {
     using namespace Eigen;
 
+#if ENABLE_MKL
+    PardisoLDLT<SparseMatrixType> solver(A);
+#else
     SimplicialLDLT<SparseMatrixType> solver(A);
+#endif
 
     return solver.solve(b);
 }
@@ -139,10 +147,10 @@ int main(int argc, char **argv) {
 
     if (argc == 1) {
         inputPath = ".";
-        indexSize = "32";
+        indexSize = "64";
     } else if (argc == 2) {
         inputPath = argv[1];
-        indexSize = "32";
+        indexSize = "64";
     } else if (argc == 3) {
         inputPath = argv[1];
         indexSize = argv[2];
@@ -153,11 +161,21 @@ int main(int argc, char **argv) {
 
     using namespace Eigen;
 
+#if ENABLE_MKL
+    std::cerr << "Sparse Cholesky implementation: MKL" << std::endl;
+#else
+    std::cerr << "Sparse Cholesky implementation: Eigen" << std::endl;
+#endif
+
     if (indexSize == "32") {
+#if ENABLE_MKL
+        std::cerr << "MKL requires 64-bit sparse matrix indices" << std::endl;
+#else
         typedef SparseMatrix<double, ColMajor, int32_t> SM;
         std::cerr << "Sparse matrix index size: " << indexSize << " bit" << std::endl;
 
         processInput<SM>(inputPath);
+#endif
     } else if (indexSize == "64") {
         typedef SparseMatrix<double, ColMajor, int64_t> SM;
         std::cerr << "Sparse matrix index size: " << indexSize << " bit" << std::endl;
