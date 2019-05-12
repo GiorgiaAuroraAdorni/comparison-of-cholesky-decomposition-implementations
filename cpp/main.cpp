@@ -27,21 +27,22 @@ Eigen::VectorXd solveSystem(const SparseMatrixType &A, const Eigen::VectorXd &b)
     return solver.solve(b);
 }
 
+template<typename SparseMatrixType>
 MatrixInfo processMatrix(const std::string &filename) {
     using namespace Eigen;
 
-    MatrixInfo info;
-    SparseMatrix<double> A;
+    MatrixInfo info {};
+    SparseMatrixType A;
 
     {
         std::cerr << "Loading matrix '" << filename << "'... " << std::flush;
 
         auto start = std::chrono::high_resolution_clock::now();
 
-        SparseMatrix<double> matrix;
+        SparseMatrixType matrix;
         bool result = loadMarketGzip(matrix, filename);
 
-        A = matrix.selfadjointView<Lower>();
+        A = matrix.template selfadjointView<Lower>();
 
         auto end = std::chrono::high_resolution_clock::now();
 
@@ -78,8 +79,9 @@ MatrixInfo processMatrix(const std::string &filename) {
     return info;
 }
 
+template<typename SparseMatrixType>
 void processFile(const boost::filesystem::path &file) {
-    MatrixInfo info = processMatrix(file.string());
+    MatrixInfo info = processMatrix<SparseMatrixType>(file.string());
 
     std::cout << file.filename().string() << ","
               << info.rows << ","
@@ -89,6 +91,7 @@ void processFile(const boost::filesystem::path &file) {
               << info.relativeError << std::endl;
 }
 
+template<typename SparseMatrixType>
 void processDirectory(const boost::filesystem::path &directory, bool wait = false) {
     namespace fs = boost::filesystem;
     namespace algo = boost::algorithm;
@@ -113,7 +116,18 @@ void processDirectory(const boost::filesystem::path &directory, bool wait = fals
             std::cin.get();
         }
 
-        processFile(filepath);
+        processFile<SparseMatrixType>(filepath);
+    }
+}
+
+template<typename SparseMatrixType>
+void processInput(const boost::filesystem::path &inputPath) {
+    namespace fs = boost::filesystem;
+
+    if (fs::is_directory(inputPath)) {
+        processDirectory<SparseMatrixType>(inputPath);
+    } else {
+        processFile<SparseMatrixType>(inputPath);
     }
 }
 
@@ -121,20 +135,36 @@ int main(int argc, char **argv) {
     namespace fs = boost::filesystem;
 
     fs::path inputPath;
+    std::string indexSize;
 
     if (argc == 1) {
         inputPath = ".";
+        indexSize = "32";
     } else if (argc == 2) {
         inputPath = argv[1];
+        indexSize = "32";
+    } else if (argc == 3) {
+        inputPath = argv[1];
+        indexSize = argv[2];
     } else {
         std::cerr << "Unexpected command line arguments!" << std::endl;
         return 1;
     }
 
-    if (fs::is_directory(inputPath)) {
-        processDirectory(inputPath);
+    using namespace Eigen;
+
+    if (indexSize == "32") {
+        typedef SparseMatrix<double, ColMajor, int32_t> SM;
+        std::cerr << "Sparse matrix index size: " << indexSize << " bit" << std::endl;
+
+        processInput<SM>(inputPath);
+    } else if (indexSize == "64") {
+        typedef SparseMatrix<double, ColMajor, int64_t> SM;
+        std::cerr << "Sparse matrix index size: " << indexSize << " bit" << std::endl;
+
+        processInput<SM>(inputPath);
     } else {
-        processFile(inputPath);
+        std::cerr << "Unexpected value for sparse matrix index size: " << indexSize << std::endl;
     }
 
     return 0;
