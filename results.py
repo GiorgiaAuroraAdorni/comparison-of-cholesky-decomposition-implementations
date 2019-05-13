@@ -3,7 +3,6 @@ from my_plot import save_plot_os, save_plot_comparison
 from util import get_file, extract_columns
 import os
 
-# Each value in each column is appended to a list
 os.chdir("matlab/output")
 
 macos_out = get_file("macos", "matlabOutput.csv")
@@ -27,4 +26,3 @@ save_plot_os(columns_windows, "nonZeros", "Non Zeros", "results/windows_OnNonZer
 ##
 save_plot_comparison(columns_ubuntu, columns_windows, "rows", "Matrix Size", "results/ubuntu-windows_comparisonOnSize.pdf")
 save_plot_comparison(columns_ubuntu, columns_windows, "nonZeros", "Non Zeros", "results/ubuntu-windows_comparisonOnNonZeros.pdf")
-
