@@ -13,12 +13,12 @@ def plot_results(x, y, x_label, y_label, title):
     plt.title(title, weight='bold', fontsize=8)
 
 
-def plot_comparison_result(x1, y1, x2, y2, x_label, y_label, title):
+def plot_comparison_result(x1, y1, x2, y2, x_label, y_label, label1, label2, title):
     sorted_x1, sorted_y1 = zip(*sorted(zip(x1, y1)))
     sorted_x2, sorted_y2 = zip(*sorted(zip(x2, y2)))
 
-    plt.plot(sorted_x1, sorted_y1, 'o-', linewidth=2, markersize=6, label='ubuntu')
-    plt.plot(sorted_x2, sorted_y2, 'o-', linewidth=2, markersize=6, label='windows')
+    plt.plot(sorted_x1, sorted_y1, 'o-', linewidth=2, markersize=6, label=label1)
+    plt.plot(sorted_x2, sorted_y2, 'o-', linewidth=2, markersize=6, label=label2)
 
     plt.legend(loc='upper left')
 
@@ -51,22 +51,22 @@ def save_plot_os(columns, x, x_name, filename):
     plt.show()
 
 
-def save_plot_comparison(columns1, columns2, x, x_name, filename):
+def save_plot_comparison(columns1, columns2, x, x_name, label1, label2, filename):
 
     # Plot based on the rows number of each matrix
     plt.subplots(nrows=3, ncols=1, figsize=(6, 8))
 
     plt.subplot(3, 1, 1)
     plot_comparison_result(columns1[x], columns1['solveTime'], columns2[x], columns2['solveTime'], x_name,
-                           'Time (seconds)', 'Time required to solve the systems')
+                           'Time (seconds)', label1, label2, 'Time required to solve the systems')
 
     plt.subplot(3, 1, 2)
     plot_comparison_result(columns1[x], columns1['relativeError'], columns2[x], columns2['solveTime'], x_name,
-                           'Relative Error', 'Relative errors')
+                           'Relative Error', label1, label2, 'Relative errors')
 
     plt.subplot(3, 1, 3)
     plot_comparison_result(columns1[x], columns1['maxMemory'], columns2[x], columns2['solveTime'], x_name,
-                           'Max Memory (byte)', 'Max memory used to solve the systems')
+                           'Max Memory (byte)', label1, label2, 'Max memory used to solve the systems')
 
     plt.tight_layout()
     plt.savefig(filename)
