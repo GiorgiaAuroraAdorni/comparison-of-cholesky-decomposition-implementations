@@ -13,12 +13,11 @@ def plot_results(x, y, x_label, y_label, title):
     plt.title(title, weight='bold', fontsize=8)
 
 
-def plot_comparison_result(x1, y1, x2, y2, x_label, y_label, label1, label2, title):
-    sorted_x1, sorted_y1 = zip(*sorted(zip(x1, y1)))
-    sorted_x2, sorted_y2 = zip(*sorted(zip(x2, y2)))
+def plot_comparison_result(x_set, y_set, x_label, y_label, labels, title):
 
-    plt.plot(sorted_x1, sorted_y1, 'o-', linewidth=2, markersize=6, label=label1)
-    plt.plot(sorted_x2, sorted_y2, 'o-', linewidth=2, markersize=6, label=label2)
+    for i in range(len(x_set)):
+        sorted_x, sorted_y = zip(*sorted(zip(x_set[i], y_set[i])))
+        plt.plot(sorted_x, sorted_y, 'o-', linewidth=2, markersize=6, label=labels[i])
 
     plt.legend(loc='upper left')
 
@@ -51,23 +50,32 @@ def save_plot_os(columns, x, x_name, filename):
     plt.show()
 
 
-def save_plot_comparison(columns1, columns2, x, x_name, label1, label2, filename):
+def save_plot_comparison(columns, x, x_name, labels, filename):
 
     # Plot based on the rows number of each matrix
     plt.subplots(nrows=3, ncols=1, figsize=(6, 8))
 
+    x_set = list()
+    y_set1 = list()
+    y_set2 = list()
+    y_set3 = list()
+
+    for i in range(len(columns)):
+        x_set.append(columns[i][x])
+        y_set1.append(columns[i]['solveTime'])
+        y_set2.append(columns[i]['relativeError'])
+        y_set3.append(columns[i]['maxMemory'])
+
     plt.subplot(3, 1, 1)
-    plot_comparison_result(columns1[x], columns1['solveTime'], columns2[x], columns2['solveTime'], x_name,
-                           'Time (seconds)', label1, label2, 'Time required to solve the systems')
+    plot_comparison_result(x_set, y_set1, x_name, 'Time (seconds)', labels, 'Time required to solve the systems')
 
     plt.subplot(3, 1, 2)
-    plot_comparison_result(columns1[x], columns1['relativeError'], columns2[x], columns2['solveTime'], x_name,
-                           'Relative Error', label1, label2, 'Relative errors')
+    plot_comparison_result(x_set, y_set2, x_name, 'Relative Error', labels, 'Relative errors')
 
     plt.subplot(3, 1, 3)
-    plot_comparison_result(columns1[x], columns1['maxMemory'], columns2[x], columns2['solveTime'], x_name,
-                           'Max Memory (byte)', label1, label2, 'Max memory used to solve the systems')
+    plot_comparison_result(x_set, y_set3, x_name, 'Max Memory (byte)', labels, 'Max memory used to solve the systems')
 
     plt.tight_layout()
     plt.savefig(filename)
     plt.show()
+
