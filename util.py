@@ -12,7 +12,14 @@ def monitor_memory(subproc):
     pid = subproc.pid
     proc = psutil.Process(pid)
 
-    if sys.platform.startswith("linux"):
+    ### Only for MATLAB
+    if sys.platform.startswith("win"):
+        while not proc.children():
+            pass
+
+        proc = proc.children()[0]
+    ###
+    elif sys.platform.startswith("linux"):
         with open('/proc/' + str(pid) + '/oom_score_adj', 'w') as score:
             score.write('1000')
 
