@@ -15,7 +15,7 @@ file_list, matrix_list = get_matrix_list(matrices_dir, ".mat")
 
 if sys.platform.startswith("linux"):
     matlab_path = "/usr/local/bin/matlab"
-elif sys.platform.startswith("linux"):
+elif sys.platform.startswith("mac"):
     matlab_path = "/Volumes/Documenti/Applicazioni/MATLAB/MATLAB_R2019a.app/bin/matlab"
 else:
     matlab_path = "matlab"
