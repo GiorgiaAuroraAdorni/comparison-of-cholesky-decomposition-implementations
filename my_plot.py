@@ -8,40 +8,39 @@ def plot_results(x, y, x_label, y_label, title):
     plt.xscale('log')
     plt.yscale('log')
 
-    plt.xlabel(x_label, fontsize=6)
-    plt.ylabel(y_label, fontsize=6)
-    plt.title(title, weight='bold', fontsize=8)
+    plt.xlabel(x_label, fontsize=12)
+    plt.ylabel(y_label, fontsize=12)
+    plt.title(title, weight='bold', fontsize=14)
 
 
 def plot_comparison_result(x_set, y_set, x_label, y_label, labels, title):
 
     for i in range(len(x_set)):
         sorted_x, sorted_y = zip(*sorted(zip(x_set[i], y_set[i])))
-        plt.plot(sorted_x, sorted_y, 'o-', linewidth=2, markersize=6, label=labels[i])
-
-    plt.legend(loc='upper left')
+        plt.plot(sorted_x, sorted_y, 'o-', linewidth=3, markersize=8, label=labels[i])
 
     plt.xscale('log')
     plt.yscale('log')
 
-    plt.xlabel(x_label, fontsize=6)
-    plt.ylabel(y_label, fontsize=6)
-    plt.title(title, weight='bold', fontsize=8)
+    plt.xlabel(x_label, fontsize=12)
+    plt.ylabel(y_label, fontsize=12)
+
+    plt.title(title, weight='bold', fontsize=14, y=1.05)
 
 
 def save_plot_os(columns, x, x_name, filename):
     # Plot based on the rows number of each matrix
-    plt.subplots(nrows=3, ncols=1, figsize=(6, 8))
+    plt.subplots(nrows=1, ncols=3, figsize=(24, 6))
 
-    plt.subplot(3, 1, 1)
+    plt.subplot(1, 3, 1)
     plot_results(columns[x], columns['solveTime'], x_name, 'Time (seconds)',
                  'Time required to solve the systems')
 
-    plt.subplot(3, 1, 2)
+    plt.subplot(1, 3, 2)
     plot_results(columns[x], columns['relativeError'], x_name, 'Relative Error',
                  'Relative errors')
 
-    plt.subplot(3, 1, 3)
+    plt.subplot(1, 3, 3)
     plot_results(columns[x], columns['maxMemory'], x_name, 'Max Memory (byte)',
                  'Max memory used to solve the systems')
 
@@ -53,7 +52,7 @@ def save_plot_os(columns, x, x_name, filename):
 def save_plot_comparison(columns, x, x_name, labels, filename):
 
     # Plot based on the rows number of each matrix
-    plt.subplots(nrows=3, ncols=1, figsize=(6, 8))
+    plt.subplots(nrows=1, ncols=3, figsize=(24, 6))
 
     x_set = list()
     y_set1 = list()
@@ -66,16 +65,21 @@ def save_plot_comparison(columns, x, x_name, labels, filename):
         y_set2.append(columns[i]['relativeError'])
         y_set3.append(columns[i]['maxMemory'])
 
-    plt.subplot(3, 1, 1)
+    plt.subplot(1, 3, 1)
+    plt.subplots_adjust(left=0.05, bottom=0.2, right=0.95, top=0.85, wspace=None, hspace=None)
     plot_comparison_result(x_set, y_set1, x_name, 'Time (seconds)', labels, 'Time required to solve the systems')
 
-    plt.subplot(3, 1, 2)
+    plt.figlegend(loc="lower center", ncol=3, labelspacing=0.)
+
+    plt.subplot(1, 3, 2)
+    plt.subplots_adjust(left=0.05, bottom=0.2, right=0.95, top=0.85, wspace=None, hspace=None)
     plot_comparison_result(x_set, y_set2, x_name, 'Relative Error', labels, 'Relative errors')
 
-    plt.subplot(3, 1, 3)
+    plt.subplot(1, 3, 3)
+    plt.subplots_adjust(left=0.05, bottom=0.2, right=0.95, top=0.85, wspace=None, hspace=None)
     plot_comparison_result(x_set, y_set3, x_name, 'Max Memory (byte)', labels, 'Max memory used to solve the systems')
 
-    plt.tight_layout()
+    #plt.tight_layout()
     plt.savefig(filename)
     plt.show()
 
