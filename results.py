@@ -90,3 +90,31 @@ save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, co
                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows"], "results/comparison/all_windows_OnSize.pdf")
 save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows], "nonZeros", "Non Zeros",
                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows"], "results/comparison/all_windows_OnNonZeros.pdf")
+save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows, columns_cpp_ubuntu_native_64, columns_cpp_ubuntu_mkl, columns_matlab_ubuntu], "nonZeros", "Non Zeros",
+                     ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows", "Eigen (64 bit) Ubuntu", "Eigen MKL Ubuntu", "MATLAB Ubuntu"], "results/comparison/all_OnNonZeros2.pdf")
+save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows, columns_cpp_ubuntu_native_64, columns_cpp_ubuntu_mkl, columns_matlab_ubuntu], "rows", "Matrix Size",
+                     ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows", "Eigen (64 bit) Ubuntu", "Eigen MKL Ubuntu", "MATLAB Ubuntu"], "results/comparison/all_OnSize2.pdf")
+
+
+# save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows, columns_cpp_ubuntu_native_64, columns_cpp_ubuntu_mkl, columns_matlab_ubuntu], "nonZeros", "Non Zeros",
+#                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows", "Eigen (64 bit) Ubuntu", "Eigen MKL Ubuntu", "MATLAB Ubuntu"], "results/comparison/TIME_all_OnNonZeros.pdf")
+# save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows, columns_cpp_ubuntu_native_64, columns_cpp_ubuntu_mkl, columns_matlab_ubuntu], "rows", "Matrix Size",
+#                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows", "Eigen (64 bit) Ubuntu", "Eigen MKL Ubuntu", "MATLAB Ubuntu"], "results/comparison/TIME_all_OnSize.pdf")
+
+
+# save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows, columns_cpp_ubuntu_native_64, columns_cpp_ubuntu_mkl, columns_matlab_ubuntu], "nonZeros", "Non Zeros",
+#                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows", "Eigen (64 bit) Ubuntu", "Eigen MKL Ubuntu", "MATLAB Ubuntu"], "results/comparison/ERR_all_OnNonZeros.pdf")
+# save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows, columns_cpp_ubuntu_native_64, columns_cpp_ubuntu_mkl, columns_matlab_ubuntu], "rows", "Matrix Size",
+#                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows", "Eigen (64 bit) Ubuntu", "Eigen MKL Ubuntu", "MATLAB Ubuntu"], "results/comparison/ERR_all_OnSize.pdf")
+
+
+# save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows, columns_cpp_ubuntu_native_64, columns_cpp_ubuntu_mkl, columns_matlab_ubuntu], "nonZeros", "Non Zeros",
+#                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows", "Eigen (64 bit) Ubuntu", "Eigen MKL Ubuntu", "MATLAB Ubuntu"], "results/comparison/MEM_all_OnNonZeros.pdf")
+# save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows, columns_cpp_ubuntu_native_64, columns_cpp_ubuntu_mkl, columns_matlab_ubuntu], "rows", "Matrix Size",
+#                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows", "Eigen (64 bit) Ubuntu", "Eigen MKL Ubuntu", "MATLAB Ubuntu"], "results/comparison/MEM_all_OnSize.pdf")
+
+
+# save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows], "rows", "Matrix Size",
+#                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows"], "results/comparison/prova_OnSize.pdf")
+# save_plot_comparison([columns_cpp_windows_native_64, columns_cpp_windows_mkl, columns_matlab_windows], "nonZeros", "Non Zeros",
+#                      ["Eigen (64 bit) Windows", "Eigen MKL Windows", "MATLAB Windows"], "results/comparison/prova_OnNonZeros.pdf")
